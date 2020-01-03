@@ -1,0 +1,36 @@
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.filler {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.divider {
+  width: 100%;
+  padding-top: 5px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid aqua;
+}
+
+.padding-left {
+  padding-left: 20px;
+}
+
+.padding-right {
+  padding-right: 20px;
+}
+
+.button-delete {
+  position: absolute;
+  width: fit-content;
+  right: 10px;
+
+}

@@ -1,0 +1,45 @@
+<div style="display: flex; flex-direction: column; margin: 20px; border: 1px solid aqua; border-radius: 10px">
+  <div class="row padding-left" style="background-color: orange; border-radius: 10px 10px 0 0;">
+    <div>
+      <h2>{{city.name}}, {{city.country}}</h2>
+      <h4>{{city.weather.description}}</h4>
+    </div>
+    <div class="filler"></div>
+    <div>
+      <img src="assets/img/{{city.weather.icon}}.png" alt="weather icon">
+    </div>
+    <div style="position: relative">
+      <button (click)="delete()" style="position: absolute" class="button-delete">Delete</button>
+    </div>
+  </div>
+  <div class="row padding-left">
+    <div>
+      <h1>{{city.mainWeather.temp - 273}}°C</h1>
+    </div>
+    <div style="margin-left: auto; margin-right: auto"></div>
+    <div class="filler">
+      <div class="row"><b>Details</b></div>
+      <div class="divider"></div>
+      <div class="row">
+        <div class="col padding-right">Feels like</div>
+        <div class="filler"></div>
+        <div class="col">{{city.mainWeather.feelsLike - 273}}°C</div>
+      </div>
+      <div class="row">
+        <div class="col padding-right">Wind</div>
+        <div class="filler"></div>
+        <div class="col">{{city.wind.speed}} m/s</div>
+      </div>
+      <div class="row">
+        <div class="col padding-right">Humidity</div>
+        <div class="filler"></div>
+        <div class="col">{{city.mainWeather.humidity}}%</div>
+      </div>
+      <div class="row">
+        <div class="col padding-right">Pressure</div>
+        <div class="filler"></div>
+        <div class="col">{{city.mainWeather.pressure}} hPa</div>
+      </div>
+    </div>
+  </div>
+</div>
