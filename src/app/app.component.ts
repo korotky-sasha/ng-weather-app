@@ -9,7 +9,7 @@ import { City, CityMain, availableCities, chosenCities, weatherDataArr } from '.
 import { WeatherService } from './services/weather.service';
 
 // TODO: modal for live search
-// TODO: limit number of chosen cities (around 25)
+// TODO: use field 'selected' in availableCities instead of removing elements from it
 // TODO: unique state for each user
 // TODO: use NgRx store to hold the data
 
@@ -31,10 +31,13 @@ export class AppComponent implements OnInit {
   searchFieldChanged: Subject <string> = new Subject <string> ();
   isModal = false;
   deleteCityConfirmed: Subject <boolean> = new Subject<boolean>();
+  requestCounter = 0;
+  requestCounter$ = new Subject<number>();
+  requestQueue = [];
 
   constructor(
-    private fb: FormBuilder,
-    private ws: WeatherService
+    private formBuilder: FormBuilder,
+    private weatherService: WeatherService
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +45,7 @@ export class AppComponent implements OnInit {
     this.buildForm();
     this.sortCitiesByName();
     this.startLiveSearch();
+    this.requestListener();
   }
 
   prepareData() {
@@ -97,7 +101,7 @@ export class AppComponent implements OnInit {
   }
 
   buildForm() {
-    this.form = this.fb.group({
+    this.form = this.formBuilder.group({
       name: ['', Validators.required]
     });
   }
@@ -135,7 +139,7 @@ export class AppComponent implements OnInit {
       }
     });
     if (!isFind) {
-      this.ws.getCity(id).subscribe( (value) => {
+      this.weatherService.getCity(id).subscribe( (value) => {
         console.log(value);
         const weather = value;
         this.weatherDataArr.push(weather);
@@ -148,18 +152,12 @@ export class AppComponent implements OnInit {
   }
 
   addCity(city: CityMain) {
-    if (this.chosenCities.length < 9) {
-      this.chosenCities.push(city);
-      this.getWeather(city.id);
-      this.availableCities.splice(this.availableCities.indexOf(city), 1);
-      this.searchResults.splice(this.searchResults.indexOf(city), 1);
-      this.setStore('availableCities', this.availableCities);
-      this.setStore('chosenCities', this.chosenCities);
-    } else {
-      // TODO: display massage
-      console.log('Should display a message like: "There are too many selected cities! Max number of selected cities is 25.' +
-        'Please delete some if you want to add new city."');
-    }
+    this.chosenCities.push(city);
+    this.getWeather(city.id);
+    this.availableCities.splice(this.availableCities.indexOf(city), 1);
+    this.searchResults.splice(this.searchResults.indexOf(city), 1);
+    this.setStore('availableCities', this.availableCities);
+    this.setStore('chosenCities', this.chosenCities);
   }
 
   deleteCity(id: number) {
@@ -205,17 +203,45 @@ export class AppComponent implements OnInit {
   }
 
   checkWeatherTime(id: number) {
-    const cityWeather = this.weatherDataArr.find( data => {
+    let arrIndex;
+    const cityWeather = this.weatherDataArr.find( (data, index) => {
+      if (data.id === id) {
+        arrIndex = index;
+      }
       return data.id === id;
     });
     if (cityWeather) {
       const weatherTime = new Date(cityWeather.dt * 1000);
       const currentTime = Date.now();
       const timeDifference = +weatherTime - currentTime;
-      // console.log(cityWeather.dt, weatherTime, currentTime, timeDifference);
       if (-timeDifference > 7200000) {
-        console.log('Weather data is old and should be updated');
+        console.log('Weather data for', cityWeather.name, 'is old and should be updated');
+        // noinspection JSUnusedAssignment
+        this.weatherDataArr.splice(arrIndex, 1);
       }
     }
+  }
+
+  fakeRequest(payload?) {
+    if (this.requestCounter > 4) {
+      console.log('Limit reached');
+      this.requestQueue.push(payload);
+    } else {
+      console.log('Sending request');
+      this.requestCounter++;
+      this.requestCounter$.next(this.requestCounter);
+      setTimeout( () => {
+        this.requestCounter--;
+        this.requestCounter$.next(this.requestCounter);
+      }, 10000);
+    }
+  }
+
+  requestListener() {
+    this.requestCounter$.subscribe( value => {
+      if (this.requestQueue.length > 0 && value < 5) {
+        console.log(this.requestQueue.shift());
+      }
+    });
   }
 }

@@ -30,7 +30,7 @@
   <button (click)="sortCitiesByName(true)">{{ascendingOrder ? '^' : 'v'}}</button>
 </div>
 <div>
-  <button (click)="checkWeatherTime(745042)">Start</button>
+  <button (click)="fakeRequest()">Start</button>
 </div>
 <div class="row flex-wrap">
   <div *ngFor="let city of preparedDataArr">

@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
+import { httpInterceptorProviders } from './core/http-interceptors';
+
 import { AppComponent } from './app.component';
 import { CityCardComponent } from './city-card/city-card.component';
 import { ModalComponent } from './modal/modal.component';
@@ -20,7 +22,9 @@ import { ModalComponent } from './modal/modal.component';
     AppRoutingModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
