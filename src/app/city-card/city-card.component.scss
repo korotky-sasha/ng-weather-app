@@ -8,7 +8,12 @@
   flex-direction: column;
 }
 
-.filler {
+.temperature {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.details {
   margin-left: auto;
   margin-right: auto;
 }
@@ -28,9 +33,34 @@
   padding-right: 20px;
 }
 
+.button-delete-container {
+  position: relative;
+}
+
 .button-delete {
   position: absolute;
   width: fit-content;
   right: 10px;
+}
 
+.weather-container {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  border: 1px solid aqua;
+  border-radius: 10px;
+}
+
+.weather-header {
+  background-color: orange;
+  border-radius: 10px 10px 0 0;
+}
+
+.loading-placeholder {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  border: 1px solid aqua;
+  border-radius: 10px;
+  text-align: center;
 }

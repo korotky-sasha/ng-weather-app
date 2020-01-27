@@ -6,35 +6,37 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 
-import {Observable, timer} from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class RequestLimitInterceptor implements HttpInterceptor {
-  requestCounter = 0;
   requestQueue = [];
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const baseWidth = environment.baseWidth; // calls
     const baseTime = environment.baseTime; // per time in milliseconds
     const currentTime = Date.now();
-    if (this.requestCounter >= baseWidth) {
-      console.log('Limit reached', new Date());
+    if (this.requestQueue.length >= baseWidth) {
+      // console.log('Limit reached', new Date());
       const num = this.requestQueue.length % baseWidth;
       const shift = this.requestQueue[num] ? this.requestQueue[num] : 0;
       const multiplier = Math.floor(this.requestQueue.length / baseWidth);
       const delay = baseTime * multiplier - (currentTime - shift);
-      console.log(this.requestQueue[0], currentTime, 'sending request with delay ', delay);
+      // console.log(this.requestQueue, currentTime, 'sending request with delay ', delay);
       this.requestQueue.push(currentTime + delay);
+      setTimeout( () => {
+        // console.log('shifting queue', this.requestQueue, this.requestQueue.length);
+        this.requestQueue.shift();
+      }, baseTime + delay);
       return this.sendRequest(request, next, delay);
     } else {
-      console.log('Sending request at', currentTime);
-      this.requestCounter++;
+      // console.log('Sending request at', currentTime);
       this.requestQueue.push(currentTime);
       setTimeout( () => {
-        this.requestCounter--;
+        // console.log('shifting queue', this.requestQueue, this.requestQueue.length);
         this.requestQueue.shift();
       }, baseTime);
       return  this.sendRequest(request, next);

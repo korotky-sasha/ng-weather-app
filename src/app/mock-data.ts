@@ -98,6 +98,14 @@ export const weatherDataArr = [
 ];
 
 export const chosenCities = [
+  {id: 2643743, loading: false},
+  {id: 2988507, loading: false},
+  {id: 2950159, loading: false},
+  {id: 2761369, loading: false},
+  {id: 703448, loading: false}
+];
+
+export const availableCities = [
   {id: 2643743,
     name: 'London',
     country: 'GB', },
@@ -113,9 +121,6 @@ export const chosenCities = [
   {id: 703448,
     name: 'Kiev',
     country: 'UA', },
-];
-
-export const availableCities = [
   {id: 3067696,
     name: 'Prague',
     country: 'CZ', },

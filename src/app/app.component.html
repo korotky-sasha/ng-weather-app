@@ -1,12 +1,28 @@
-<h1>Current weather</h1>
+<div style="display: flex; flex-wrap: wrap;">
+  <h1>Current weather</h1>
+  <div *ngIf="selectedUser$ | async as selectedUser" style="margin-left: auto">
+    <span>Selected user: {{selectedUser.name}}</span>
+    <form [formGroup]="setUserForm" (ngSubmit)="setSelectedUser(+setUserForm.value.user)">
+      <label>
+        Select user:
+        <select formControlName="user" (change)="setSelectedUser(+setUserForm.value.user)">
+          <option *ngFor="let user of availableUsers$ | async" [value]="user.id" (select)="setSelectedUser(user.id)">
+            {{user.name}}
+          </option>
+        </select>
+      </label>
+    </form>
+  </div>
+</div>
 <div class="search-container">
-  <form [formGroup]="form">
-    <label>Choose new city:
+  <form [formGroup]="addCityForm">
+    <label>
+      Choose new city:
       <input
         formControlName="name"
         type="text"
         placeholder="City name"
-        (keyup)="liveSearch(form.value.name)"
+        (keyup)="liveSearch(addCityForm.value.name)"
         (focusin)="searchActive=true"
         (focusout)="searchActive=false"
       >
@@ -20,21 +36,14 @@
     >
       <div *ngFor="let result of searchResults">
         <span>{{result.name}}, {{result.country}}</span>
-        <button (click)="addCity(result)" class="margin-left">+</button>
+        <button (click)="addChosenCity(result.id)" class="margin-left">+</button>
       </div>
     </div>
   </div>
 </div>
-<div class="row">
-  <span>Sorting order</span>
-  <button (click)="sortCitiesByName(true)">{{ascendingOrder ? '^' : 'v'}}</button>
-</div>
-<div>
-  <button (click)="fakeRequest()">Start</button>
-</div>
+<app-modal *ngIf="isModal" (closed)="modalClosed()" (deleteConfirmed)="modalConfirmed()"></app-modal>
 <div class="row flex-wrap">
-  <div *ngFor="let city of preparedDataArr">
-    <app-city-card [city]="city" (deleted)="tryDeleteCity(city.id)"></app-city-card>
+  <div *ngFor="let city of chosenCitiesWeather$ | async">
+    <app-city-card [city]="city" (deleted)="tryDeleteCity(city.city.id)"></app-city-card>
   </div>
 </div>
-<app-modal *ngIf="isModal" (closed)="modalClosed()" (deleteConfirmed)="modalConfirmed()"></app-modal>

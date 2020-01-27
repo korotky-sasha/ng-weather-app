@@ -1,6 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { City } from '../mock-data';
+import {City, Weather} from '../shared/models';
+
+interface WeatherState {
+  weather: Weather;
+  city: City;
+  loading: boolean;
+}
 
 @Component({
   selector: 'app-city-card',
@@ -9,7 +15,7 @@ import { City } from '../mock-data';
 })
 
 export class CityCardComponent {
-  @Input() city: City;
+  @Input() city: WeatherState;
 
   @Output() deleted = new EventEmitter<boolean>();
 
@@ -18,5 +24,4 @@ export class CityCardComponent {
   delete() {
     this.deleted.emit(true);
   }
-
 }
