@@ -3,11 +3,6 @@ import { createAction, props } from '@ngrx/store';
 import { Weather } from '../../shared/models';
 
 
-export const addCityWeather = createAction(
-  '[App Component] Add City Weather',
-  props<{weather: Weather}>()
-);
-
 export const setWeather = createAction(
   '[App Component] Set Weather',
   props<{weather: Weather[]}>()
@@ -26,10 +21,6 @@ export const loadCityWeather = createAction(
 export const getCityWeatherSuccess = createAction(
   '[City API] Load City Weather Success',
   props<{weather: Weather}>()
-);
-
-export const prepareSelectedCityWeather = createAction(
-  '[App Component] Prepare Selected City Weather'
 );
 
 export const deleteOldWeather = createAction(

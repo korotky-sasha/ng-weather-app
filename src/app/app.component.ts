@@ -6,9 +6,9 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { Store, select } from '@ngrx/store';
 
-import { State, User } from './shared/models';
+import { State } from './shared/models';
 
-import { addChosenCity, addUser, deleteChosenCity, setSelectedUser } from './store/user';
+import { addChosenCity, deleteChosenCity, setSelectedUser } from './store/user';
 import { deleteOldWeather } from './store/weather';
 
 import { getSelectedUser, getAvailableUsers } from './store/user';
@@ -17,7 +17,6 @@ import { getAvailableCities, getChosenCities } from './store/city';
 
 import { WeatherService } from './services/weather.service';
 
-// TODO: shared modal component for live search, confirmation of deleting city etc
 
 @Component({
   selector: 'app-root',
@@ -50,7 +49,6 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.buildForms();
     this.startLiveSearch();
-    // store
     this.getAvailableCities();
     this.getChosenCities();
     this.deleteOldWeather();
@@ -107,12 +105,6 @@ export class AppComponent implements OnInit {
   modalClosed() {
     this.isModal = false;
     this.deleteCityConfirmed.next(false);
-  }
-
-  addUser(user: User) {
-    this.store.dispatch(addUser(
-      { user })
-    );
   }
 
   setSelectedUser(id: number) {

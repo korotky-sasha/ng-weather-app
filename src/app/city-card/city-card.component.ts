@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import {City, Weather} from '../shared/models';
+import { City, Weather } from '../shared/models';
 
 interface WeatherState {
   weather: Weather;

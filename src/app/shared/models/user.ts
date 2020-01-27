@@ -6,7 +6,6 @@ export interface ChosenCity {
 export interface User {
   id: number;
   name: string;
-  // chosenCities: number[];
   chosenCities: ChosenCity[];
 }
 

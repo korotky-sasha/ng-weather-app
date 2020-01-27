@@ -13,23 +13,8 @@ export const initialState: UsersData = {
 
 const userReducer = createReducer(
   initialState,
-  on(UserActions.addUser, (state, {user}) => {
-    const newUsers = state.users.map( value => {
-      const newObj = cloneDeep(value);
-      console.log(newObj === value);
-      return newObj;
-      // return {...value, chosenCities: value.chosenCities.map(item => ({...item}))};
-    });
-    // newUsers.push({...user, chosenCities: user.chosenCities.map(item => ({...item}))});
-    newUsers.push(cloneDeep(user));
-    return  {
-      ...state,
-      users: newUsers
-    };
-  }),
   on(UserActions.setSelectedUser, (state, {id} ) => {
     const newUsers = state.users.map( value => {
-      // return {...value};
       return cloneDeep(value);
     });
     return  {

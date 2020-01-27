@@ -6,7 +6,7 @@ import { EMPTY, from, of } from 'rxjs';
 import { map, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
 import { cloneDeep } from 'lodash-es';
 
-import {loadCityWeather, prepareSelectedCityWeather, deleteOldWeather, setWeather} from './weather.actions';
+import { loadCityWeather, deleteOldWeather, setWeather } from './weather.actions';
 import { getUsers, setSelectedUser } from '../user';
 
 import { getSelectedUser, addChosenCity } from '../user';
@@ -69,7 +69,6 @@ export class WeatherEffects {
               newWeather.push(cloneDeep(value));
             }
           });
-          // console.log(newWeather);
           return of(({ type: '[App Component] Set Weather', weather: newWeather }));
         } else {
           return EMPTY;
@@ -83,7 +82,6 @@ export class WeatherEffects {
     withLatestFrom(this.store.select(getWeather)),
     mergeMap( ([action, weather]) => {
       const chosenCityId = action.id;
-      console.log(chosenCityId, weather);
       const isWeatherExists = !!weather.find( cityWeather => {
         return cityWeather.id === chosenCityId;
       });
@@ -130,12 +128,7 @@ export class WeatherEffects {
     const weatherTime = new Date(cityWeather.dt * 1000);
     const currentTime = Date.now();
     const timeDifference = +weatherTime - currentTime;
-    if (-timeDifference > 7200000) {
-      console.log('Weather data for', cityWeather.name, 'is old and should be updated', -timeDifference);
-      return true;
-    } else {
-      return false;
-    }
+    return -timeDifference > 7200000;
   }
 
 }

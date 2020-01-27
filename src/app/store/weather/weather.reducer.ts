@@ -9,7 +9,7 @@ export const initialState: Weather[] = [];
 
 const weatherReducer = createReducer(
   initialState,
-  on(WeatherActions.addCityWeather, WeatherActions.getCityWeatherSuccess, (state, {weather}) => {
+  on(WeatherActions.getCityWeatherSuccess, (state, {weather}) => {
     const newWeather = state
       .map( value => {
         if (weather.id !== value.id) {

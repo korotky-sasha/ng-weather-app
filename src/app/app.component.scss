@@ -28,6 +28,10 @@
   margin-left: 20px;
 }
 
+.margin-left-auto {
+  margin-left: auto;
+}
+
 .padding-left {
   padding-left: 20px;
 }
@@ -38,6 +42,10 @@
 
 .search-container {
   width: fit-content;
+
+  .search-results-container {
+    position: relative;
+  }
 
   .search-results {
     position: absolute;

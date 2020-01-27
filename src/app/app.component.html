@@ -1,6 +1,6 @@
-<div style="display: flex; flex-wrap: wrap;">
+<div class="row flex-wrap">
   <h1>Current weather</h1>
-  <div *ngIf="selectedUser$ | async as selectedUser" style="margin-left: auto">
+  <div *ngIf="selectedUser$ | async as selectedUser" class="margin-left-auto">
     <span>Selected user: {{selectedUser.name}}</span>
     <form [formGroup]="setUserForm" (ngSubmit)="setSelectedUser(+setUserForm.value.user)">
       <label>
@@ -28,7 +28,7 @@
       >
     </label>
   </form>
-  <div *ngIf="searchActive || searchHover" style="position: relative">
+  <div *ngIf="searchActive || searchHover" class="search-results-container">
     <div
       (mouseenter)="searchHover = true"
       (mouseleave)="searchHover = false"
