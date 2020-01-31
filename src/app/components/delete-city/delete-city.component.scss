@@ -1,0 +1,19 @@
+.container {
+  padding: 20px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.margin-left {
+  margin-left: 20px;
+}
+
+.button-menu {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}

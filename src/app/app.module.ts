@@ -14,15 +14,25 @@ import { AppRoutingModule } from './app-routing.module';
 import { httpInterceptorProviders } from './core/http-interceptors';
 
 import { AppComponent } from './app.component';
-import { CityCardComponent } from './city-card/city-card.component';
-import { ModalComponent } from './modal/modal.component';
+import { CityCardComponent } from './components/city-card/city-card.component';
+import { ModalContainerComponent } from './components/modal-container/modal-container.component';
+import { HostDirective } from './directives/host.directive';
+import { DeleteCityComponent } from './components/delete-city/delete-city.component';
+import { AddCityComponent } from './components/add-city/add-city.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     CityCardComponent,
-    ModalComponent
+    ModalContainerComponent,
+    HostDirective,
+    DeleteCityComponent,
+    AddCityComponent
+  ],
+  entryComponents: [
+    DeleteCityComponent,
+    AddCityComponent
   ],
   imports: [
     BrowserModule,

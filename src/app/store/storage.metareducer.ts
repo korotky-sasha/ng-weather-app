@@ -2,7 +2,7 @@ import { ActionReducer, Action } from '@ngrx/store';
 import { merge, pick } from 'lodash-es';
 
 import { availableCities, chosenCities } from '../mock-data';
-import {User} from '../shared/models';
+
 
 function setSavedState(state: any, storageKey: string) {
   localStorage.setItem(storageKey, JSON.stringify(state));
@@ -16,7 +16,8 @@ function getSavedState(storageKey: string): any {
 const stateKeys = [
   'allCities',
   'weather',
-  'usersData'
+  'usersData',
+  'modal'
 ];
 
 const initialState = {
@@ -28,6 +29,11 @@ const initialState = {
       {id: 2, name: 'TestUser2', chosenCities: []}
     ],
     selectedUser: 1
+  },
+  modal: {
+    isOpen: false,
+    modalContent: null,
+    options: null
   }
 };
 // the key for the local storage.

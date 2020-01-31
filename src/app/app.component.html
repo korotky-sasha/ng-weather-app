@@ -14,36 +14,10 @@
     </form>
   </div>
 </div>
-<div class="search-container">
-  <form [formGroup]="addCityForm">
-    <label>
-      Choose new city:
-      <input
-        formControlName="name"
-        type="text"
-        placeholder="City name"
-        (keyup)="liveSearch(addCityForm.value.name)"
-        (focusin)="searchActive=true"
-        (focusout)="searchActive=false"
-      >
-    </label>
-  </form>
-  <div *ngIf="searchActive || searchHover" class="search-results-container">
-    <div
-      (mouseenter)="searchHover = true"
-      (mouseleave)="searchHover = false"
-      class="search-results"
-    >
-      <div *ngFor="let result of searchResults">
-        <span>{{result.name}}, {{result.country}}</span>
-        <button (click)="addChosenCity(result.id)" class="margin-left">+</button>
-      </div>
-    </div>
-  </div>
-</div>
-<app-modal *ngIf="isModal" (closed)="modalClosed()" (deleteConfirmed)="modalConfirmed()"></app-modal>
+<button (click)="openModal(addCityComponent)">Add City</button>
+<app-modal-container *ngIf="isModal$ | async"></app-modal-container>
 <div class="row flex-wrap">
   <div *ngFor="let city of chosenCitiesWeather$ | async">
-    <app-city-card [city]="city" (deleted)="tryDeleteCity(city.city.id)"></app-city-card>
+    <app-city-card [city]="city"></app-city-card>
   </div>
 </div>

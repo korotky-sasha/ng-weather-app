@@ -1,19 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Type } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { Store, select } from '@ngrx/store';
 
 import { State } from './shared/models';
 
-import { addChosenCity, deleteChosenCity, setSelectedUser } from './store/user';
+import { setSelectedUser } from './store/user';
 import { deleteOldWeather } from './store/weather';
+import { openModal, closeModal } from './store/modal';
 
 import { getSelectedUser, getAvailableUsers } from './store/user';
 import { getChosenCitiesWeather } from './store/weather';
 import { getAvailableCities, getChosenCities } from './store/city';
+import { isModalOpened } from './store/modal';
+
+import { AddCityComponent } from './components/add-city/add-city.component';
 
 import { WeatherService } from './services/weather.service';
 
@@ -30,15 +31,11 @@ export class AppComponent implements OnInit {
   chosenCities = null;
   addCityForm: FormGroup;
   setUserForm: FormGroup;
-  searchActive = false;
-  searchHover = false;
-  searchResults = [];
-  searchFieldChanged: Subject <string> = new Subject <string> ();
-  isModal = false;
-  deleteCityConfirmed: Subject <boolean> = new Subject<boolean>();
   chosenCitiesWeather$ = this.store.select(getChosenCitiesWeather);
   selectedUser$ = this.store.select(getSelectedUser);
   availableUsers$ = this.store.select(getAvailableUsers);
+  isModal$ = this.store.select(isModalOpened);
+  addCityComponent = AddCityComponent;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -48,13 +45,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForms();
-    this.startLiveSearch();
-    this.getAvailableCities();
-    this.getChosenCities();
-    this.deleteOldWeather();
-    setInterval(() => {
-      this.deleteOldWeather();
-    }, 7200000);
+    this.initStore();
   }
 
   buildForms() {
@@ -66,65 +57,18 @@ export class AppComponent implements OnInit {
     });
   }
 
-  startLiveSearch() {
-    this.searchFieldChanged
-      .pipe(
-        debounceTime(500),
-        distinctUntilChanged(),
-      )
-      .subscribe( (value) => {
-        this.searchCity(value);
-      });
-  }
-
-  liveSearch(name) {
-    this.searchFieldChanged.next(name);
-  }
-
-  searchCity(q: string) {
-    this.searchResults = this.availableCities.filter((value) => {
-      return value.name.toLowerCase().includes(q.toLowerCase());
-    });
-  }
-
-  tryDeleteCity(id: number) {
-    this.isModal = true;
-    const subscription = this.deleteCityConfirmed.subscribe( value => {
-      if (value) {
-        this.deleteChosenCity(id);
-      }
-      this.isModal = false;
-      subscription.unsubscribe();
-    });
-  }
-
-  modalConfirmed() {
-    this.deleteCityConfirmed.next(true);
-  }
-
-  modalClosed() {
-    this.isModal = false;
-    this.deleteCityConfirmed.next(false);
+  initStore() {
+    this.store.dispatch(closeModal());
+    this.getAvailableCities();
+    this.getChosenCities();
+    this.deleteOldWeather();
+    setInterval(() => {
+      this.deleteOldWeather();
+    }, 7200000);
   }
 
   setSelectedUser(id: number) {
     this.store.dispatch(setSelectedUser({id}));
-  }
-
-  addChosenCity(id: number) {
-    this.addCityForm.reset();
-    this.searchResults = null;
-    this.searchActive = false;
-    this.searchHover = false;
-    this.store.dispatch(addChosenCity(
-      { id }
-    ));
-  }
-
-  deleteChosenCity(id: number) {
-    this.store.dispatch(deleteChosenCity(
-      { id }
-    ));
   }
 
   getAvailableCities() {
@@ -147,6 +91,10 @@ export class AppComponent implements OnInit {
 
   deleteOldWeather() {
     this.store.dispatch(deleteOldWeather());
+  }
+
+  openModal(component: Type<any>) {
+    this.store.dispatch(openModal({component}));
   }
 
 }
