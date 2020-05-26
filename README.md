@@ -1,5 +1,12 @@
 # NgWeatherApp
 
+Angular project for displaying current weather. Uses OpenWeatherMap API: https://openweathermap.org/api
+Live search of cities, lazy loading current weather of selected cities.
+
+You can see working sample on Stackblitz: https://stackblitz.com/github/korotky-sasha/ng-weather-app
+
+Used technologies: Angular 8, RxJs, NgRx
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.8.
 
 ## Development server
